@@ -1,0 +1,13 @@
+# Load distro-specific variables
+- include_vars: "{{ ansible_distribution }}.yml"
+  tags: always
+
+- block:
+  - import_tasks: server_packages.yml
+  - import_tasks: hardening.yml
+  - import_tasks: ufw.yml
+  - import_tasks: copy_scripts.yml
+
+  rescue:
+    - set_fact: task_failed=true
+

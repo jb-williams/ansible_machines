@@ -1,0 +1,40 @@
+- name: Install pip3
+  apt:
+    force_apt_get: yes
+    name: python3-pip
+    state: present
+
+- name: Install Python Docker Module
+  pip:
+    name: docker
+    state: present
+
+- name: Increase the Virt Mem on the Elk VM
+  command: sysctl -w vm.max_map_count=262144
+
+- name: Increase Mem on Reboot
+  shell: echo "vm.max_map_count=262144" >> /etc/sysctl.conf
+
+- name: Use more Mem
+  sysctl:
+     name: vm.max_map_count
+     value: "262144"
+     state: present
+     reload: yes
+
+- name: download and launch a docker elk container
+  docker_container:
+    name: elk_stack
+    image: sebp/elk:761
+    state: started
+    restart_policy: always
+    published_ports:
+      - 5601:5601
+      - 9200:9200
+      - 5044:5044
+
+- name: Enable docker service
+  systemd:
+    name: docker
+    enabled: yes
+

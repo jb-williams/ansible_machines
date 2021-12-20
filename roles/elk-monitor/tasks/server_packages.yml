@@ -1,0 +1,17 @@
+- name: server setup | stuff | install packages
+  tags: packages,server,settings
+  package:
+    state: latest
+    name:
+      - apt-listbugs
+      - auditd
+      - debsums
+      - debsecan
+      - chkrootkit
+      - clamav
+      - fail2ban
+      - logrotate
+      - lynis
+      - needrestart
+      - pkg-config
+      - docker.io

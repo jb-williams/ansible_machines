@@ -1,0 +1,7 @@
+- name: software | install misc game packages
+  tags: gaming
+  package:
+    name:
+      - openarena
+  when: games is defined and games == true
+

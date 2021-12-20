@@ -1,0 +1,9 @@
+- name: system setup | scripts | copy backup.sh
+  tags: scripts,cron
+  copy:
+    src: files/backup.sh
+    dest: /etc/cron.weekly/backup.sh
+    owner: root
+    group: root
+    mode: 0600
+

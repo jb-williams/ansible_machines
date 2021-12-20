@@ -1,0 +1,44 @@
+- name: users | binford | remove preinstalled clutter from home directory
+  file:
+    path: /home/binford/{{ item }}
+    state: absent
+  with_items:
+    - examples.desktop
+
+- name: users | binford | create personal config directories
+  tags: dotfiles,dotfiles-binford
+  file:
+    path: /home/binford/{{ item.dir }}
+    state: directory
+    owner: binford
+    group: binford
+    mode: 0700
+  with_items:
+    - { dir: .config }
+    - { dir: .config/autostart }
+    - { dir: .local }
+    - { dir: .local/share }
+    - { dir: .local/share/applications }
+    - { dir: bin }
+
+- name: users | binford | copy user-dirs.dirs
+  tags: dotfiles,dotfiles-binford
+  copy:
+    src: users/binford/user-dirs.dirs
+    dest: /home/binford/.config/user-dirs.dirs
+    owner: binford
+    group: binford
+    mode: 0600
+  notify: update_xdg
+
+- name: users | binford | copy personal config files
+  tags: dotfiles,dotfiles-binford
+  copy:
+    src: users/binford/{{ item.src }}
+    dest: /home/binford/{{ item.dest }}
+    owner: binford
+    group: binford
+    mode: 0600
+  with_items:
+    - { src: 'vimrc', dest: '.vimrc' }
+    - { src: 'ssh_client_config', dest: '.ssh/config' }

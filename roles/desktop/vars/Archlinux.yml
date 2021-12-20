@@ -1,0 +1,13 @@
+cryptsetup_package: cryptsetup
+cups_package: cups
+font_hack_ttf_package: ttf-hack
+lightdm_package: lightdm
+binford_user_group: users
+libnotify_package: libnotify
+nethack_package: nethack
+network_manager_openvpn_package: networkmanager-openvpn
+network_manager_package: networkmanager
+steam_package: steam
+wireless_tools_package: wireless_tools
+wpa_supplicant_package: wpa_supplicant
+

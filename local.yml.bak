@@ -1,0 +1,58 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+  - name: install packages
+    package:
+      name:
+        - htop
+        - tmux
+        - vim
+
+  - name: move fav-wallpaper file
+    copy:
+      src: files/fav-wallpaper.png
+      dest: /usr/share/images/desktop-base/fav-wallpaper.png
+      owner: root
+      group: root
+
+  - name: set wallpaper
+    become_user: binford
+    dconf:
+      key: "path/to/xfce/background/pic-uri"
+      value: "'file:///usr/share/images/desktop-base/fav-wallpaper.png'"
+
+  - name: set wallpaper pos
+    become_user: binford
+    dconf:
+      key: "/path/to/xfce/background/pic-options"
+      value: "'zoom'"
+
+  - name: copy .bashrc file
+    copy:
+     src: files/bashrc
+     dest: /home/binford/.bashrc
+     owner: binford
+     group: binford
+
+  - name: add asnible user
+    user:
+      name: change_username
+      system: yes
+
+  - name: set up sudo for ansible user
+    copy:
+      src: files/sudoer_change_username
+      dest: /etc/sudoers.d/change_username
+      owner: root
+      group: root
+      mode: 0440
+
+  - name: add asnible-pull cron job
+    cron:
+      name: ansible auto-provision
+      user: change_username
+      minute: "*/10"
+      job: ansible-pull -o -U https://github.com/jb-williams/ansible_machines.git

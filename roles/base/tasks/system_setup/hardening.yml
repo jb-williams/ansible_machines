@@ -1,0 +1,36 @@
+- name: hardening ssh 
+  tags: always
+  tasks:
+
+    - name: Changing Port Mapping
+      shell: sed -i 's/#Port 22/Port 61337/g' /etc/ssh/sshd_config
+
+    - name: Changing LogLevel Verbose
+      shell: sed -i 's/#LogLevel INFO/LogLevel VERBOSE/g' /etc/ssh/sshd_config
+
+    - name: No root login ssh
+      shell: sed -i 's/#PermitRootLogin prohibit-passowrd/PermitRootLogin no/g' /etc/ssh/sshd_config
+
+    - name: Change Max Auth Tries SSH
+      shell: sed -i 's/#MaxAuthTries 6/MaxAuthTries 3/g' /etc/ssh/sshd_config
+
+    - name: Change Num of SSH Sessions
+      shell: sed -i 's/#MaxSessions 10/MaxSessions 2/g' /etc/ssh/sshd_config
+
+    - name: Not Allowing Agent Forwarding
+      shell: sed -i 's/#AllowAgentForwarding yes/AllowAgentForwarding no/g' /etc/ssh/sshd_config
+
+    - name: No TCP Forwarding
+      shell: sed -i 's/#AllowTcpForwarding yes/AllowTcpForwarding no/g' /etc/ssh/sshd_config
+
+    - name: No X11 Forwarding
+      shell: sed -i 's/X11Forwarding yes/X11Forwarding no/g' /etc/ssh/sshd_config
+
+    - name: Restart SSHD
+      shell: systemctl restart sshd
+
+    - name: backup jail conf
+      shell: cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+    - name: hardening umask
+      shell: sed -i 's/022/027/g' /etc/login.defs
